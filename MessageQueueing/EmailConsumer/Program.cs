@@ -20,7 +20,7 @@ namespace EmailConsumer
                                      autoDelete: false,
                                      arguments: null);
 
-                _channel.QueueBind("emailQueue", "firstExchange", string.Empty);
+                _channel.QueueBind("emailQueue", "firstExchange", "email");
 
                 var consumer = new EventingBasicConsumer(_channel);
                 consumer.Received += ConsumerReceived;
