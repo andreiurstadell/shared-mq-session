@@ -7,24 +7,30 @@ namespace Consumer
 {
     class Program
     {
+        private static IModel _channel;
+        //private static connection = 
         static void Main(string[] args)
         {
-           var factory = new ConnectionFactory() { HostName = "localhost" };
+            var factory = new ConnectionFactory() { HostName = "localhost" };
             using (var connection = factory.CreateConnection())
-            using (var channel = connection.CreateModel())
             {
-                var consumer = new EventingBasicConsumer(channel);
+                _channel = connection.CreateModel();
+
+                var consumer = new EventingBasicConsumer(_channel);
                 consumer.Received += ConsumerReceived;
-                channel.BasicConsume("firstDeclare",true,consumer);
+                _channel.BasicConsume("firstDeclare", false, consumer);
                 Console.WriteLine(" Press [enter] to exit.");
-            Console.ReadLine();
+                Console.ReadLine();
+                _channel.Close();
             }
+
         }
 
         private static void ConsumerReceived(object sender, BasicDeliverEventArgs e)
         {
             var message = Encoding.UTF8.GetString(e.Body);
             Console.WriteLine(" [x]Received {0}", message);
+            _channel.BasicAck(e.DeliveryTag, false);
         }
     }
 }
