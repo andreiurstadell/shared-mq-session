@@ -16,10 +16,17 @@ namespace AuditConsumer
             using (var connection = factory.CreateConnection())
             {
                 _channel = connection.CreateModel();
+                _channel.QueueDeclare(queue: "audit",
+                                     durable: false,
+                                     exclusive: false,
+                                     autoDelete: false,
+                                     arguments: null);
+                
+                _channel.QueueBind("audit", "firstExchange", "#");
 
                 var consumer = new EventingBasicConsumer(_channel);
                 consumer.Received += ConsumerReceived;
-                _channel.BasicConsume("firstDeclare", false, consumer);
+                _channel.BasicConsume("audit", false, consumer);
                 Console.WriteLine(" Press [enter] to exit.");
                 Console.ReadLine();
                 _channel.Close();
