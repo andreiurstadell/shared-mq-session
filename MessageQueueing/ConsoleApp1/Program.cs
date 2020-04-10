@@ -11,7 +11,7 @@ namespace AuditConsumer
         private static IModel _channel;
         //private static connection = 
         static void Main(string[] args)
-        {
+        { 
             var factory = new ConnectionFactory() { HostName = "localhost" };
             using (var connection = factory.CreateConnection())
             {

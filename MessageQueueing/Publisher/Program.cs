@@ -20,13 +20,13 @@ namespace Publisher
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
-                channel.ExchangeDeclare("firstExchange", "direct", true, false);
+                channel.ExchangeDeclare("firstExchange", "topic", true, false, null);
                 channel.QueueDeclare(queue: "firstDeclare",
                                      durable: false,
                                      exclusive: false,
                                      autoDelete: false,
                                      arguments: null);
-
+                
                 string message = "Hello World!";
                 string message2 = "hello world2";
                 var body = Encoding.UTF8.GetBytes(message);
@@ -38,7 +38,7 @@ namespace Publisher
                                      basicProperties: null,
                                      body: body);
                 channel.BasicPublish(exchange: "firstExchange",
-                                     routingKey: "doc",
+                                     routingKey: "email",
                                      basicProperties: null,
                                      body: body2);
                 Console.WriteLine(" [x] Sent {0}", message);
