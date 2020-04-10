@@ -19,6 +19,7 @@ namespace ConsumerWorkerService
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddHostedService<Worker>();
+                    services.AddHostedService<EmailWorker>();
                 });
     }
 }

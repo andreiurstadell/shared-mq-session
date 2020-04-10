@@ -35,6 +35,7 @@ namespace ConsumerWorkerService
                 _logger.LogInformation(" Press [enter] to exit.");
                 
         }
+
         private  void ConsumerReceived(object sender, BasicDeliverEventArgs e)
         {
             var message = Encoding.UTF8.GetString(e.Body);
