@@ -28,13 +28,19 @@ namespace Publisher
                                      arguments: null);
 
                 string message = "Hello World!";
+                string message2 = "hello world2";
                 var body = Encoding.UTF8.GetBytes(message);
+                var body2 = Encoding.UTF8.GetBytes(message2);
                 channel.QueueBind("firstDeclare", "firstExchange", "doc");
 
                 channel.BasicPublish(exchange: "firstExchange",
                                      routingKey: "doc",
                                      basicProperties: null,
                                      body: body);
+                channel.BasicPublish(exchange: "firstExchange",
+                                     routingKey: "doc",
+                                     basicProperties: null,
+                                     body: body2);
                 Console.WriteLine(" [x] Sent {0}", message);
             }
 
