@@ -2,12 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GreenPipes;
 using MassTransit;
+using MassTransit.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Producer.Consumers;
 
 namespace Producer
 {
@@ -18,17 +21,28 @@ namespace Producer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-          
+
             services.AddMassTransit(x =>
             {
 
-            x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(cfg =>
-            {
-                cfg.Host("rabbitmq://localhost");
-            }));
-        });
+                x.AddBus(provider =>
+                {
+                    var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
+                    {
+                        cfg.Host("rabbitmq://localhost");
+                        cfg.ReceiveEndpoint("email_queue", e =>
+                        {
+                            e.UseMessageRetry(r => r.Interval(2, 100));
+                            e.Consumer<EmailConsumer>();
+                        });
+                    });
 
-        services.AddMassTransitHostedService();
+                    busControl.ConnectConsumeAuditObserver(new AuditStore());
+                    return busControl;
+                });
+            });
+
+            services.AddMassTransitHostedService();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

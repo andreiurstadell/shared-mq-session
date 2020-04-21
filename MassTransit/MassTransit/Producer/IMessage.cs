@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Producer
+﻿namespace Producer
 {
-    interface IMessage
+    public interface IMessage
     {
         string Content { get;set;}
     }
 }
+// - next up:
+// ---- second document consumer
+// ---- third consumer to capture email and doc

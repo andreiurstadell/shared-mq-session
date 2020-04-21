@@ -11,7 +11,7 @@ namespace Producer.Controller
     [Route("api/[controller]")]
     [ApiController]
     public class PublishController : ControllerBase
-    {   
+    {
         private IPublishEndpoint _endpoint;
 
         public PublishController(IPublishEndpoint publishEndpoint)
@@ -20,7 +20,7 @@ namespace Producer.Controller
         }
         public async Task Publish()
         {
-            await _endpoint.Publish<IMessage>(new {Content = "msg"});
+            await _endpoint.Publish<IMessage>(new { Content = "msg" });
         }
     }
 }
