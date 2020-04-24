@@ -24,16 +24,17 @@ namespace Producer
 
             services.AddMassTransit(x =>
             {
-
+                x.AddConsumer<EmailConsumer>();
                 x.AddBus(provider =>
                 {
+
                     var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
                     {
                         cfg.Host("rabbitmq://localhost");
                         cfg.ReceiveEndpoint("email_queue", e =>
                         {
                             e.UseMessageRetry(r => r.Interval(2, 100));
-                            e.Consumer<EmailConsumer>();
+                            e.ConfigureConsumer<EmailConsumer>(provider);
                         });
                     });
 
