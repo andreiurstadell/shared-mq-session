@@ -1,11 +1,12 @@
 ﻿using MassTransit;
 using Microsoft.Extensions.Logging;
+using Producer.Messages;
 using System;
 using System.Threading.Tasks;
 
 namespace Producer.Consumers
 {
-    public class AuditConsumer : IConsumer<IEmailMessage>, IConsumer<IDocMessage> 
+    public class AuditConsumer : IConsumer<IAuditMessage>
     {
         private readonly ILogger<AuditConsumer> _logger;
 
@@ -14,15 +15,9 @@ namespace Producer.Consumers
             _logger = logger;
         }
 
-        public Task Consume(ConsumeContext<IEmailMessage> context)
+        public Task Consume(ConsumeContext<IAuditMessage> context)
         {
-            _logger.LogInformation($"Audit Email message content: {context.Message.Content}");
-            return Task.CompletedTask;
-        }
-
-        public Task Consume(ConsumeContext<IDocMessage> context)
-        {
-            _logger.LogInformation($"Audit Doc message content: {context.Message.Text}");
+            _logger.LogInformation($"Audit message content: {System.Text.Json.JsonSerializer.Serialize(context.Message)}");
             return Task.CompletedTask;
         }
     }
