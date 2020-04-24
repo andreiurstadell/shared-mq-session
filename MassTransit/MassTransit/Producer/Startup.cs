@@ -26,6 +26,7 @@ namespace Producer
             {
                 x.AddConsumer<EmailConsumer>();
                 x.AddConsumer<DocConsumer>();
+                x.AddConsumer<AuditConsumer>();
                 x.AddBus(provider =>
                 {
 
@@ -41,6 +42,11 @@ namespace Producer
                         { 
                             e.UseMessageRetry(r => r.Interval(2, 100));
                             e.ConfigureConsumer<DocConsumer>(provider);
+                            });
+                        cfg.ReceiveEndpoint("audit_queue", e => 
+                        { 
+                            e.UseMessageRetry(r => r.Interval(2, 100));
+                            e.ConfigureConsumer<AuditConsumer>(provider);
                             });
                     });
 
