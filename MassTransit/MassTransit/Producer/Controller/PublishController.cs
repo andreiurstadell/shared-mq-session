@@ -18,9 +18,15 @@ namespace Producer.Controller
         {
             _endpoint = publishEndpoint;
         }
-        public async Task Publish()
+        [Route("email")]
+        public async Task PublishEmail()
         {
-            await _endpoint.Publish<IMessage>(new { Content = "msg" });
+            await _endpoint.Publish<IEmailMessage>(new { Content = "msg" });
+        }
+        [Route("doc")]
+        public async Task PublishDoc()
+        {
+            await _endpoint.Publish<IDocMessage>(new { Text = "msg22" });
         }
     }
 }

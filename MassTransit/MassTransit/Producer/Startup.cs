@@ -25,6 +25,7 @@ namespace Producer
             services.AddMassTransit(x =>
             {
                 x.AddConsumer<EmailConsumer>();
+                x.AddConsumer<DocConsumer>();
                 x.AddBus(provider =>
                 {
 
@@ -36,6 +37,11 @@ namespace Producer
                             e.UseMessageRetry(r => r.Interval(2, 100));
                             e.ConfigureConsumer<EmailConsumer>(provider);
                         });
+                        cfg.ReceiveEndpoint("doc_queue", e => 
+                        { 
+                            e.UseMessageRetry(r => r.Interval(2, 100));
+                            e.ConfigureConsumer<DocConsumer>(provider);
+                            });
                     });
 
                     busControl.ConnectConsumeAuditObserver(new AuditStore());

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Producer.Consumers
 {
-    public class EmailConsumer : IConsumer<IMessage>
+    public class EmailConsumer : IConsumer<IEmailMessage>
     {
         private readonly ILogger<EmailConsumer> _logger;
 
@@ -14,7 +14,7 @@ namespace Producer.Consumers
             _logger = logger;
         }
 
-        public Task Consume(ConsumeContext<IMessage> context)
+        public Task Consume(ConsumeContext<IEmailMessage> context)
         {
             _logger.LogInformation($"Email message content: {context.Message.Content}");
             return Task.CompletedTask;

@@ -1,6 +1,6 @@
 ﻿namespace Producer
 {
-    public interface IMessage
+    public interface IEmailMessage
     {
         string Content { get;set;}
     }
